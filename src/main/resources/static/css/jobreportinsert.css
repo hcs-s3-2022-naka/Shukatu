@@ -1,0 +1,26 @@
+@charset "UTF-8";
+
+span.reportdetails {
+	height: 50px;
+}
+
+.bg-white {
+	background-color: #fff !important;
+}
+
+label {
+	width: 100%;
+	color: white;
+	margin: 0;
+}
+
+.rcome {
+	margin-left: auto;
+	margin-right: auto;
+	width: 100%;
+	height: 250%;
+}
+
+.bg-gray {
+	background-color: #DDDDDD;
+}

@@ -1,0 +1,294 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+
+<meta charset="UTF-8">
+<title>就職活動 -一覧</title>
+
+<!-- モバイル設定 -->
+<meta id="viewport" name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="manifest" th:href="@{/css/manifest.json}"
+	crossorigin="use-credentials">
+<meta name="application-name" content="WebPortal">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="WebPortal">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<!-- アイコン設定 -->
+<link rel="icon" th:href="@{/img/favicon.ico}" sizes="192x192"
+	href="../static/img/favicon.ico">
+<link rel="shortcut icon" th:href="@{/img/favicon.ico}">
+<link rel="apple-touch-icon" th:href="@{/img/favicon.ico}">
+<link rel="apple-touch-icon" th:href="@{/img/favicon.ico}"
+	sizes="192x192">
+<link rel="apple-touch-icon" th:href="@{/img/favicon.ico}" sizes="58x58">
+
+<!-- スタイル設定 -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<link rel="stylesheet" th:href="@{/css/ress.css}"
+	href="../static/css/ress.css">
+<link rel="stylesheet" th:href="@{/css/home.css}"
+	href="../static/css/home.css">
+<link rel="stylesheet" th:href="@{/css/jobapplist.css}"
+	href="../static/css/jobapplist.css">
+<link rel="stylesheet" th:href="@{/css/color.css}"
+	href="../static/css/color.css">
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/v/bs4/jq-3.6.0/dt-1.11.3/datatables.min.css" />
+<script type="text/javascript"
+	src="https://cdn.datatables.net/v/bs4/jq-3.6.0/dt-1.11.3/datatables.min.js"></script>
+<script th:src="@{/js/jobapplist.js}"></script>
+</head>
+
+<body th:classappend="${session.isDarkmode} ? 'mode-dark'">
+
+	<!-- 共通ヘッダ -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+		<h1>
+			<a class="navbar-brand title-font" th:href="@{/}">就活Portal.com</a>
+		</h1>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarToggler" aria-controls="navbarToggler"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarToggler">
+			<ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+				<li class="nav-item active" th:if="${appListCnt != 0}"><a
+					th:href class="tuuti-nav nav-link" data-toggle="modal"
+					data-target="#sampleModal"><span class="appListCnt"
+						th:text="${appListCnt}"></span><img class="tuuti-img"
+						th:src="@{/img/tuuti.png}" src="../static/img/tuuti.png"> </a></li>
+				<li class="nav-item active" th:if="${appListCnt == 0}"><a
+					th:href class="nav-link" data-toggle="modal"
+					data-target="#sampleModal"><img class="beru-img"
+						th:src="@{/img/beru.png}" src="../static/img/beru.png"> </a></li>
+				<li class="nav-item active"><a class="nav-link"
+					th:href="@{/change}"> <img class="config-img"
+						th:src="@{/img/config.png}" src="../static/img/config.png">
+				</a></li>
+				<li>
+					<form class="my-2 my-lg-0" method="post" th:action="@{/logout}">
+						<button class="btn btn-outline-light my-2 my-sm-0" type="submit">Logout</button>
+					</form>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<br>
+
+	<!-- コンテンツ -->
+		<div class="container">
+		<div class="content-box text-left">
+	<div class="button-left">
+		&nbsp;&nbsp;<a class="btn gray" th:href="@{/}">戻る</a>&nbsp;&nbsp;
+	</div>
+	<div class="button-left">
+		<a class="btn aqua" th:href="@{/jobapp/jobappinsert/}">新規作成</a>
+	</div>
+
+	<div class="button-right">
+		<button type="submit" class="btn orange" name="buttonValue" value="1"
+			form="seachForm">検索</button>
+		&nbsp;&nbsp;
+	</div>
+	<div class="button-right">
+		<button type="submit" class="btn orange" name="buttonValue" value="2"
+			form="seachForm">とりまとめ</button>
+		&nbsp;
+	</div>
+	<div class="button-right">
+		<a class="btn gray" th:href="@{/jobapp/clear}">条件クリア</a>&nbsp;&nbsp;
+	</div>
+	<br><br>
+	
+		<form class="form-inline form-group" method="post" id="seachForm"
+			th:action="@{/jobapp/search}">
+			<table class="table table-borderless">
+				<tbody>
+					<tr>
+						<td class="text-right">企業名</td>
+						<td><input type="text" class="form-control" name="appCompany"
+							size="36" value="" th:field="${searchForm.appCompany}"></td>
+						<td class="text-right">開始年月日</td>
+						<td><input type="date" class="form-control"
+							name="appStartDate" th:field="${searchForm.appStartDate}"></td>
+					</tr>
+					<tr>
+						<td class="text-right">就職活動申請状態</td>
+						<td><select class="form-control" name="appStatus"
+							th:field="${searchForm.appStatus}">
+								<option value="0">申請状態を選択</option>
+								<option value="1">申請承認待</option>
+								<option value="2">申請作成中</option>
+								<option value="3">申請承認済</option>
+								<option value="4">申請完了</option>
+								<option value="5">報告承認待</option>
+								<option value="6">報告作成中</option>
+								<option value="7">報告完了</option>
+								<option value="99">取消完了</option>
+						</select></td>
+						<td class="text-right">終了年月日</td>
+						<td><input type="date" class="form-control"
+							name="appFinishDate" th:field="${searchForm.appFinishDate}"></td>
+					</tr>
+				</tbody>
+			</table>
+
+		</form>
+	<!-- モーダル・ダイアログ -->
+	<div class="modal fade" id="sampleModal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header bg-primary">
+					<h4 class="modal-title">通知</h4>
+				</div>
+				<div class="modal-body" th:if="${appListCnt != 0}">
+					<div class="notification-body"
+						th:if="!${#lists.isEmpty(remandAppList)}">
+						<a href="/jobapp/jobappNotification/1" class="notification"
+							th:text="差戻しされた申請が + ${remandAppList.size} + 件あります"></a>
+					</div>
+					<div class="notification-body"
+						th:if="!${#lists.isEmpty(approvalAppList)}">
+						<a href="/jobapp/jobappNotification/2" class="notification"
+							th:text="承認された申請が + ${approvalAppList.size} + 件あります"></a>
+					</div>
+					<div class="notification-body"
+						th:if="!${#lists.isEmpty(remandReportList)}">
+						<a href="/jobapp/jobappNotification/3" class="notification"
+							th:text="差戻しされた報告が + ${remandReportList.size} + 件あります"></a>
+					</div>
+					<div class="notification-body"
+						th:if="!${#lists.isEmpty(approvalReportList)}">
+						<a href="/jobapp/jobappNotification/4" class="notification"
+							th:text="承認された報告が + ${approvalReportList.size} + 件あります"></a>
+					</div>
+					<div class="notification-body"
+						th:if="!${#lists.isEmpty(eventIncompList)}">
+						<a href="/jobapp/jobappNotification/5" class="notification"
+							th:text="イベント日時が近い未完了の申請が + ${eventIncompList.size} + 件あります"></a>
+					</div>
+					<div class="notification-body"
+						th:if="!${#lists.isEmpty(notSubmittedList)}">
+						<a href="/jobapp/jobappNotification/6" class="notification"
+							th:text="未提出の報告が + ${notSubmittedList.size} + 件あります"></a>
+					</div>
+					<div class="notification-body"
+						th:if="!${#lists.isEmpty(documentList)}">
+						<a href="/jobapp/jobappNotification/8" class="notification"
+							th:text="書類提出が必要な申請が + ${documentList.size} + 件あります"></a>
+					</div>
+					<div class="notification-body"
+						th:if="!${#lists.isEmpty(documentLimitList)}">
+						<a href="/jobapp/jobappNotification/9" class="notification"
+							th:text="締め切りが近い書類未提出の申請が + ${documentLimitList.size} + 件あります"></a>
+					</div>
+
+					<div class="notification-body"
+						th:if="!${#lists.isEmpty(eventList)}">
+						<hr>
+						<a href="/jobapp/jobappNotification/7" class="notification remind"
+							th:text="開催直前のイベントが + ${eventList.size} + 件あります"></a>
+					</div>
+				</div>
+
+				<div class="modal-body" th:if="${appListCnt == 0}">
+					<span>通知はありません</span>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+<br><hr><br>
+	<h2>申請一覧</h2>
+		<div class="container toggle-list-open">
+			※コース担当に連絡済の申請は<span class="nazolink">申請承認済</span>をクリック！！ <br> <br>
+			<p class="text-primary">
+				<th:block th:text=${message}></th:block>
+			</p>
+			<p class="text-danger">
+				<th:block th:text=${errorMessage}></th:block>
+			</p>
+			<table
+				class="table table-bordered table-hover table-striped center-block text-center"
+				id="jobappTable">
+				<thead>
+					<tr>
+						<th><span>No</span></th>
+						<th><span>開始年月日</span></th>
+						<th><span>終了年月日</span></th>
+						<th><span>クラス</span></th>
+						<th><span>番号</span></th>
+						<th><span>氏名</span></th>
+						<th><span>申請状態</span></th>
+						<th><span>とりまとめ</span></th>
+						<th><span>申請詳細</span></th>
+						<th><span>報告詳細</span></th>
+					</tr>
+				</thead>
+				<tbody class="bg-light">
+					<tr class="border-top"
+						th:each="jobApp, i : ${jobAppEntity.jobAppList}">
+						<td><span th:text="${i.count}"></span></td>
+						<td><span th:text="${jobApp.appStartDate}"></span></td>
+						<td><span th:text="${jobApp.appFinishDate}"></span></td>
+						<td><span th:text="${jobApp.applyClass}"></span></td>
+						<td><span th:text="${jobApp.applyNumber}"></span></td>
+						<td><span th:text="${jobApp.applyName}"></span></td>
+						<td><th:block th:switch="${jobApp.appStatus}">
+								<p th:case=1>申請承認待</p>
+								<p th:case=2>申請作成中</p>
+								<a th:href="@{'/jobapp/jopappcharge/' + ${jobApp.appId}}"
+									th:case=3 class="nazolink">申請承認済</a>
+								<p th:case=4>申請完了</p>
+								<p th:case=5>報告承認待</p>
+								<p th:case=6>報告作成中</p>
+								<p th:case=7>報告完了</p>
+								<p th:case=99>取消完了</p>
+							</th:block></td>
+						<td><th:block th:if="${jobApp.summaryFlag}">
+								<p>○</p>
+							</th:block> <th:block th:unless="${jobApp.summaryFlag}">
+								<p>-</p>
+							</th:block></td>
+						<td><a class="btn gray"
+							th:href="@{'/jobapp/jobappdetail/' + ${jobApp.appId}}">詳細</a></td>
+						<td><th:block th:if="${jobApp.appStatus} == 4">
+								<a class="btn aqua"
+									th:href="@{'/jobreport/jobreportinsert/' + ${jobApp.appId}}">報告作成</a>
+							</th:block> <th:block th:if="${jobApp.appStatus} > 4">
+								<a class="btn gray"
+									th:href="@{'/jobreport/jobreportdetail/' + ${jobApp.appId}}">詳細</a>
+							</th:block></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	</div>
+
+	<!-- 共通スクリプト -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+</body>
+</html>

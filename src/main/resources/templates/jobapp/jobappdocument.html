@@ -1,0 +1,329 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+
+<meta charset="UTF-8">
+<title>提出書類確認</title>
+
+<!-- モバイル設定 -->
+<meta id="viewport" name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="manifest" th:href="@{/css/manifest.json}"
+	crossorigin="use-credentials">
+<meta name="application-name" content="WebPortal">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="WebPortal">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<!-- アイコン設定 -->
+<link rel="icon" th:href="@{/img/favicon.ico}" sizes="192x192"
+	href="../static/img/favicon.ico">
+<link rel="shortcut icon" th:href="@{/img/favicon.ico}">
+<link rel="apple-touch-icon" th:href="@{/img/favicon.ico}">
+<link rel="apple-touch-icon" th:href="@{/img/favicon.ico}"
+	sizes="192x192">
+<link rel="apple-touch-icon" th:href="@{/img/favicon.ico}" sizes="58x58">
+
+<!-- スタイル設定 -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<link rel="stylesheet" th:href="@{/css/ress.css}"
+	href="../static/css/ress.css">
+<link rel="stylesheet" th:href="@{/css/home.css}"
+	href="../static/css/home.css">
+<link rel="stylesheet" th:href="@{/css/jobapplist.css}"
+	href="../static/css/jobapplist.css">
+<link rel="stylesheet" th:href="@{/css/jobappdocument.css}"
+	href="../static/css/jobappdocument.css">
+<link rel="stylesheet" th:href="@{/css/color.css}"
+	href="../static/css/color.css">
+<script>
+
+</script>
+
+</head>
+
+<body>
+
+	<!-- 共通ヘッダ -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-danger">
+		<h1>
+			<a class="navbar-brand title-font" th:href="@{/}">就活Portal.com</a>
+		</h1>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarToggler" aria-controls="navbarToggler"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarToggler">
+			<ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+				<li class="nav-item active"><a class="nav-link"
+					th:href="@{/change}"> <img class="config-img"
+						th:src="@{/img/config.png}" src="../static/img/config.png">
+				</a></li>
+				<li>
+					<form class="my-2 my-lg-0" method="post" th:action="@{/logout}">
+						<button class="btn btn-outline-light my-2 my-sm-0" type="submit">Logout</button>
+					</form>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<br>
+	<!-- コンテンツ -->
+	<div class="text-right" th:object="${jobAppData}">
+		<a class="btn gray"
+			th:href="@{'/jobapp/jobappdetail/' + ${jobAppData.appId}}">戻る</a>&nbsp;&nbsp;
+
+	</div>
+	<label class="bg-danger text-white text-left label-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;受験申込詳細</label>
+	<div class="p-3 mb-2 bg-gray text-dark" th:object="${jobAppData}">
+		<div class="border border-dark bg-light">
+			<div class="container">
+				<div class="text-left">
+					<br> <span style="border-bottom: solid 2px;"><strong>クラス</strong>&nbsp;&nbsp;&nbsp;&nbsp;<th:block
+							th:text="*{applyClass}"></th:block></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+						style="border-bottom: solid 2px;"><strong>出席番号</strong>&nbsp;&nbsp;&nbsp;&nbsp;<th:block
+							th:text="*{applyNumber}"></span>
+					<th:block th:if="*{summaryFlag}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<span style="border-bottom: solid 2px;"><strong>氏名</strong>&nbsp;&nbsp;&nbsp;&nbsp;<th:block
+								th:text="*{applyName}"></span>
+					</th:block>
+				</div>
+				<br>
+				<table class="table bg-white table-bordered" id="sample1_table">
+					<tbody>
+						<tr>
+							<td><strong>申込年月日</strong></td>
+							<td><span th:text="*{appDate}"></span></td>
+						</tr>
+						<tr>
+							<td><strong>受験企業名</strong></td>
+							<td><span th:text="${jobAppEntity.jobAppCompanys[0]}"></span></td>
+						</tr>
+					</tbody>
+				</table>
+
+				<table class="text-left table table-borderless">
+					<tbody>
+						<tr>
+							<td class="td-document-left">履歴書<th:block
+									th:each="document : ${jobAppEntity.jobAppDocumentList}">
+									<span th:if="${document.documentId == 1}"> <input
+										type="checkbox" checked onclick='return false;'></span>
+								</th:block></td>
+							<td class="td-document-right">健康診断証明書<th:block
+									th:each="document : ${jobAppEntity.jobAppDocumentList}">
+									<span th:if="${document.documentId == 6}"> <input
+										type="checkbox" checked onclick='return false;'></span>
+								</th:block></td>
+						</tr>
+						<tr>
+							<td class="td-document-left">大学成績証明書<th:block
+									th:each="document : ${jobAppEntity.jobAppDocumentList}">
+									<span th:if="${document.documentId == 8}"> <input
+										type="checkbox" checked onclick='return false;'></span>
+								</th:block></td>
+							<td class="td-document-right">出身高校成績証明書<th:block
+									th:each="document : ${jobAppEntity.jobAppDocumentList}">
+									<span th:if="${document.documentId == 7}"> <input
+										type="checkbox" checked onclick='return false;'></span>
+								</th:block></td>
+						</tr>
+						<tr>
+							<td class="td-document-left">大学（卒業 卒業見込）証明書<th:block
+									th:each="document : ${jobAppEntity.jobAppDocumentList}">
+									<span th:if="${document.documentId == 3}"> <input
+										type="checkbox" checked onclick='return false;'></span>
+								</th:block></td>
+							<td class="td-document-right">推薦書<th:block
+									th:each="document : ${jobAppEntity.jobAppDocumentList}">
+									<span th:if="${document.documentId == 2}"> <input
+										type="checkbox" checked onclick='return false;'></span>
+								</th:block></td>
+						</tr>
+						<tr>
+							<td class="td-document-left">HCS成績証明書<th:block
+									th:each="document : ${jobAppEntity.jobAppDocumentList}">
+									<span th:if="${document.documentId == 4}"> <input
+										type="checkbox" checked onclick='return false;'></span>
+								</th:block></td>
+							<td class="td-document-right">個人情報等同意書<th:block
+									th:each="document : ${jobAppEntity.jobAppDocumentList}">
+									<span th:if="${document.documentId == 9}"> <input
+										type="checkbox" checked onclick='return false;'></span>
+								</th:block></td>
+						</tr>
+						<tr>
+							<td class="td-document-left">HCS卒業見込証明書<th:block
+									th:each="document : ${jobAppEntity.jobAppDocumentList}">
+									<span th:if="${document.documentId == 5}"> <input
+										type="checkbox" checked onclick='return false;'></span>
+								</th:block></td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+
+		</div>
+		<div class="text-right">
+			<br> <a class="btn btn-success"
+				th:href="@{'/jobapp/jobapppdf/' + ${jobAppData.appId}}">PDF</a>
+		</div>
+	</div>
+	<div class="text-right" th:object="${jobAppData}">
+		<th:block th:if="*{documentFlag}">
+			<button type="submit" class="btn aqua" form="documents">確定</button>&nbsp;&nbsp;&nbsp;
+		</th:block>
+	</div>
+
+
+	<label class="bg-danger text-white text-left label-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;提出書類一覧</label>
+	<div class="p-3 mb-2 bg-gray text-dark">
+		<div class="container" th:object="${jobAppData}">
+			<p class="text-primary">
+				<th:block th:text=${message}></th:block>
+			</p>
+			<p class="text-danger">
+				<th:block th:text=${errorMessage}></th:block>
+			</p>
+			<form id="documents" method="post"
+				th:action="@{/jobapp/jobappdocument}">
+				<table class="table bg-white table-bordered" id="sample1_table">
+					<tbody>
+						<tr>
+							<td><strong>必要書類</strong></td>
+							<td><strong>提出済</strong></td>
+						</tr>
+						<th:block th:each="document : ${jobAppEntity.jobAppDocumentList}">
+							<tr>
+								<th:block th:if="${document.documentId == 1}">
+									<td>履歴書</td>
+									<th:block th:if="${document.status}">
+										<td>〇</td>
+									</th:block>
+									<th:block th:if="${!document.status}">
+										<td class="text-danger">未提出 <input type="checkbox"
+											name="resume"></td>
+									</th:block>
+								</th:block>
+
+								<th:block th:if="${document.documentId == 6}">
+									<td>健康診断証明書</td>
+									<th:block th:if="${document.status}">
+										<td>〇</td>
+									</th:block>
+									<th:block th:if="${!document.status}">
+										<td class="text-danger">未提出 <input type="checkbox"
+											name="healthCheckCertificate"></td>
+									</th:block>
+								</th:block>
+
+								<th:block th:if="${document.documentId == 8}">
+									<td>大学成績証明書</td>
+									<th:block th:if="${document.status}">
+										<td>〇</td>
+									</th:block>
+									<th:block th:if="${!document.status}">
+										<td class="text-danger">未提出 <input type="checkbox"
+											name="universityTranscript"></td>
+									</th:block>
+								</th:block>
+
+								<th:block th:if="${document.documentId == 7}">
+									<td>出身高校成績証明書</td>
+									<th:block th:if="${document.status}">
+										<td>〇</td>
+									</th:block>
+									<th:block th:if="${!document.status}">
+										<td class="text-danger">未提出 <input type="checkbox"
+											name="highscoolTranscript"></td>
+									</th:block>
+								</th:block>
+
+								<th:block th:if="${document.documentId == 3}">
+									<td>大学（卒業 卒業見込）証明書</td>
+									<th:block th:if="${document.status}">
+										<td>〇</td>
+									</th:block>
+									<th:block th:if="${!document.status}">
+										<td class="text-danger">未提出 <input type="checkbox"
+											name="universityCrtificate"></td>
+									</th:block>
+								</th:block>
+
+								<th:block th:if="${document.documentId == 2}">
+									<td>推薦書</td>
+									<th:block th:if="${document.status}">
+										<td>〇</td>
+									</th:block>
+									<th:block th:if="${!document.status}">
+										<td class="text-danger">未提出 <input type="checkbox"
+											name="recommendation"></td>
+									</th:block>
+								</th:block>
+
+								<th:block th:if="${document.documentId == 4}">
+									<td>HCS成績証明書</td>
+									<th:block th:if="${document.status}">
+										<td>〇</td>
+									</th:block>
+									<th:block th:if="${!document.status}">
+										<td class="text-danger">未提出 <input type="checkbox"
+											name="hcsTranscript"></td>
+									</th:block>
+								</th:block>
+
+								<th:block th:if="${document.documentId == 9}">
+									<td>個人情報等同意書</td>
+									<th:block th:if="${document.status}">
+										<td>〇</td>
+									</th:block>
+									<th:block th:if="${!document.status}">
+										<td class="text-danger">未提出 <input type="checkbox"
+											name="personalInfo"></td>
+									</th:block>
+								</th:block>
+
+								<th:block th:if="${document.documentId == 5}">
+									<td>HCS卒業見込証明書</td>
+									<th:block th:if="${document.status}">
+										<td>〇</td>
+									</th:block>
+									<th:block th:if="${!document.status}">
+										<td class="text-danger">未提出 <input type="checkbox"
+											name="hcsCrtificate"></td>
+									</th:block>
+								</th:block>
+							</tr>
+						</th:block>
+					</tbody>
+				</table>
+				<input type="hidden" name="appId" th:value="*{appId}"> <input
+					type="hidden" name="summaryId"
+					th:value="${jobAppEntity.jobAppDocumentList[0].summaryId}">
+			</form>
+		</div>
+	</div>
+
+
+	<!-- 共通スクリプト -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+</body>
+</html>

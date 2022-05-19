@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Murecho:wght@600&display=swap');
+/*
+ 共通のCSS設定を記載.
+ 1ページにしか使わない設定は、各html内で直接styleタグで指定する.
+ */
+body {
+	text-align: center;
+	background-color: #eaeaea;
+}
+
+h1 {
+	font-family: 'Dela Gothic One', cursive;
+}
+
+h2 {
+	font-weight: bold;
+	font-family: 'Murecho', sans-serif;
+}
+
+.container {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.content-box {
+	min-width: 250px;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	padding: 20px;
+	border-radius: 50px;
+	background-color: #fafad2;
+}
+
+.content-box ul {
+	list-style: none;
+}
+
+.pad {
+	padding: 10px;
+	margin-bottom: 10px;
+}
+
+
+.title-font {
+	font-size: 2rem;
+}
+
+.config-img {
+	margin: 0 10px;
+	width: 25px;
+}
+
+.back-red {
+	background-color: red;
+}
+
+.button-logout {
+	position: fixed;
+	font-size: 1rem;
+	right: -15px;
+	top: 0px;
+}
+
+.input-form {
+	margin: 20px auto;
+	max-width: 600px;
+}
+
+.input-box {
+	margin-bottom: 30px;
+}
+
+.mode-dark {
+	color: black;
+	background-color: black;
+}
+
+i.decr02 {
+	text-decoration: underline;
+	font-size: 50px;
+	text-align: right;
+}
+
+span.decr03 {
+	font-size: 30px;
+}
+
+h4.midashi {
+	position: relative;
+	display: inline-block;
+	padding: 1rem 2rem 1rem 4rem;
+	color: #fff;
+	border-radius: 100vh 0 0 100vh;
+	background: #fa4141;
+	text-align: left
+}
+
+h4.midashi:before {
+	position: absolute;
+	top: calc(50% - 7px);
+	left: 10px;
+	width: 14px;
+	height: 14px;
+	content: '';
+	border-radius: 50%;
+	background: #fff;
+	text-align: left
+}
+
+span.mandatory {
+	color: red;
+}

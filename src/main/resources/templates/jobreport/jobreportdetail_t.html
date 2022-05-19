@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+
+<meta charset="UTF-8">
+<title>就職活動報告 -詳細</title>
+
+<!-- モバイル設定 -->
+<meta id="viewport" name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="manifest" th:href="@{/css/manifest.json}"
+	crossorigin="use-credentials">
+<meta name="application-name" content="WebPortal">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="WebPortal">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<!-- アイコン設定 -->
+<link rel="icon" th:href="@{/img/favicon.ico}" sizes="192x192"
+	href="../static/img/favicon.ico">
+<link rel="shortcut icon" th:href="@{/img/favicon.ico}">
+<link rel="apple-touch-icon" th:href="@{/img/favicon.ico}">
+<link rel="apple-touch-icon" th:href="@{/img/favicon.ico}"
+	sizes="192x192">
+<link rel="apple-touch-icon" th:href="@{/img/favicon.ico}" sizes="58x58">
+
+<!-- スタイル設定 -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<link rel="stylesheet" th:href="@{/css/ress.css}"
+	href="../static/css/ress.css">
+<link rel="stylesheet" th:href="@{/css/home.css}"
+	href="../static/css/home.css">
+<link rel="stylesheet" th:href="@{/css/jobapplist.css}"
+	href="../static/css/jobapplist.css">
+<link rel="stylesheet" th:href="@{/css/color.css}"
+	href="../static/css/color.css">
+<script type="text/javascript"
+	src="https://cdn.datatables.net/v/bs4/jq-3.6.0/dt-1.11.3/datatables.min.js"></script>
+<script th:src="@{/js/jobreportdetail.js}"></script>
+<script th:src="@{/js/jobapplist.js}"></script>
+
+</head>
+
+<body>
+
+	<!-- 共通ヘッダ -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-danger">
+		<h1>
+			<a class="navbar-brand title-font" th:href="@{/}">就活Portal.com</a>
+		</h1>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarToggler" aria-controls="navbarToggler"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarToggler">
+			<ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+				<li class="nav-item active"><a class="nav-link"
+					th:href="@{/change}"> <img class="config-img"
+						th:src="@{/img/config.png}" src="../static/img/config.png">
+				</a></li>
+				<li>
+					<form class="my-2 my-lg-0" method="post" th:action="@{/logout}">
+						<button class="btn btn-outline-light my-2 my-sm-0" type="submit">Logout</button>
+					</form>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<br>
+	<!-- コンテンツ -->
+	<div class="container">
+		<div class="content-box text-left">
+	<div class="text-right" th:object="${jobReportEntity}">
+		<a class="btn btn-danger text-white" data-toggle="modal"
+			data-target="#sampleModal">取消</a>
+		<!-- モーダル・ダイアログ -->
+		<div class="modal fade" id="sampleModal" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div class="mx-auto" style="width: 200px;">取消処理を実行しますか？</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-danger text-white"
+							form="cancel">はい</button>　
+						<button type="button" class="btn gray" data-dismiss="modal">いいえ</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		&nbsp;&nbsp; <a class="btn gray" th:href="@{/jobapp/jobapplist}">戻る</a>&nbsp;&nbsp;
+		<th:block th:if="*{appStatus} == 6">
+			<a class="btn aqua"
+				th:href="@{'/jobreport/jobreportupdate/' + ${appId}}">内容変更</a>&nbsp;&nbsp;
+		</th:block>
+
+	</div>
+	<h2>報告詳細</h2>
+	<div class="p-3 mb-2 text-dark" th:object="${jobReportEntity}">
+		<div class="container">
+
+			<p class="text-left p-reqComment">
+				<span th:text="*{repComment}"></span>
+			</p>
+
+			<br>
+			<div class="container">
+				<ul th:each="data : *{jobReportList}" class="text-left">
+					<li style="font-size: 18px;"><span th:text=${data.appCompany}></span>
+						<th:block th:if="${data.appProceed}">&nbsp;&nbsp;<span
+								style="font-size: 20px;">☑</span>
+						</th:block> <th:block th:if="${!data.appProceed}">&nbsp;&nbsp;<span
+								style="font-size: 30px;">□</span>
+						</th:block> 進める</li>
+				</ul>
+			</div>
+		</div>
+
+	</div>
+
+	
+	<div class="text-right" th:object="${jobReportEntity}">
+		<th:block th:if="*{appStatus == 5  || appStatus == 7 }">
+			<button type="submit" class="btn orange" form="remand">差戻</button>&nbsp;&nbsp;
+		</th:block>
+		<th:block th:if="*{appStatus == 5}">
+			<button type="submit" class="btn btn-success" form="approval"
+				th:href="@{/jobreport/jobreportapproval/}">承認</button>&nbsp;&nbsp;
+		</th:block>
+	</div>
+
+
+	<h2>担任コメント</h2>
+	<div class="p-3 mb-2 text-dark">
+		<div class="container text-center ">
+			<th:block th:if="${checkMessage}">
+				<span class="text-danger" th:text="${checkMessage}"></span>
+			</th:block>
+
+			<th:block th:if="${jobReportEntity.appStatus != 6}">
+				<form name="remand" method="post" id="remand"
+					th:action="@{/jobreport/jobreportremand/}">
+					<textarea name="indicate" placeholder="コメントを入力してください"
+						class="tcome bg-white" id="indicate"
+						th:field="${jobReportEntity.indicate}"></textarea>
+					<input type="hidden" name="appId" th:value="${appId}">
+				</form>
+				<form method="post" id="approval"
+					th:action="@{/jobreport/jobreportapproval/}">
+					<input type="hidden" name="appId" th:value="${appId}">
+				</form>
+			</th:block>
+			<form method="post" id="cancel"
+				th:action="@{/jobreport/jobreportcancel/}">
+				<input type="hidden" name="appId" th:value="${appId}">
+			</form>
+			<th:block th:if="${jobReportEntity.appStatus == 6}">
+				<p class="text-left p-reqComment">
+					<span th:text="${jobReportEntity.indicate}"></span>
+				</p>
+			</th:block>
+
+		</div>
+	</div>
+</div>
+</div>
+
+	<!-- 共通スクリプト -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+</body>
+</html>

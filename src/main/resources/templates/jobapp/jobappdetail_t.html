@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+
+<meta charset="UTF-8">
+<title>就職活動申請 -詳細</title>
+
+<!-- モバイル設定 -->
+<meta id="viewport" name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="manifest" th:href="@{/css/manifest.json}"
+	crossorigin="use-credentials">
+<meta name="application-name" content="WebPortal">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="WebPortal">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<!-- アイコン設定 -->
+<link rel="icon" th:href="@{/img/favicon.ico}" sizes="192x192"
+	href="../static/img/favicon.ico">
+<link rel="shortcut icon" th:href="@{/img/favicon.ico}">
+<link rel="apple-touch-icon" th:href="@{/img/favicon.ico}">
+<link rel="apple-touch-icon" th:href="@{/img/favicon.ico}"
+	sizes="192x192">
+<link rel="apple-touch-icon" th:href="@{/img/favicon.ico}" sizes="58x58">
+
+<!-- スタイル設定 -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<link rel="stylesheet" th:href="@{/css/ress.css}"
+	href="../static/css/ress.css">
+<link rel="stylesheet" th:href="@{/css/home.css}"
+	href="../static/css/home.css">
+<link rel="stylesheet" th:href="@{/css/jobapplist.css}"
+	href="../static/css/jobapplist.css">
+<link rel="stylesheet" th:href="@{/css/color.css}"
+	href="../static/css/color.css">
+<script type="text/javascript"
+	src="https://cdn.datatables.net/v/bs4/jq-3.6.0/dt-1.11.3/datatables.min.js"></script>
+<script th:src="@{/js/jobapplist.js}"></script>
+
+</head>
+
+<body>
+
+	<!-- 共通ヘッダ -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-danger">
+		<h1>
+			<a class="navbar-brand title-font" th:href="@{/}">就活Portal.com</a>
+		</h1>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarToggler" aria-controls="navbarToggler"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarToggler">
+			<ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+				<li class="nav-item active"><a class="nav-link"
+					th:href="@{/change}"> <img class="config-img"
+						th:src="@{/img/config.png}" src="../static/img/config.png">
+				</a></li>
+				<li>
+					<form class="my-2 my-lg-0" method="post" th:action="@{/logout}">
+						<button class="btn btn-outline-light my-2 my-sm-0" type="submit">Logout</button>
+					</form>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<br>
+	<!-- コンテンツ -->
+	<div class="container">
+		<div class="content-box text-left">
+	<div class="text-right" th:object="${jobAppData}">
+		<a class="btn btn-danger text-white" data-toggle="modal"
+			data-target="#sampleModal">取消</a>
+		<!-- モーダル・ダイアログ -->
+		<div class="modal fade" id="sampleModal" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div class="mx-auto" style="width: 200px;">取消処理を実行しますか？</div>
+					</div>
+					<div class="text-center modal-footer ">
+						<a class="btn btn-danger"
+							th:href="@{'/jobapp/jobappcancel/' + ${jobAppData.appId}}">はい</a>
+							　
+						<button type="button" class="btn gray" data-dismiss="modal">いいえ</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		&nbsp; <a class="btn gray" th:href="@{/jobapp/jobapplist}">戻る</a>
+		<th:block th:if="*{appStatus} == 2">
+		&nbsp;<a class="btn aqua"
+				th:href="@{'/jobapp/jopappchange/' + ${jobAppData.appId}}">内容変更</a>
+		</th:block>
+		&nbsp;
+	</div>
+	<h2>申請詳細</h2>
+		<div class="p-3 mb-2 text-dark" th:object="${jobAppData}">
+		<div class="container">
+			<div class="text-left">
+				<br> <span>クラス&nbsp;&nbsp;<th:block
+						th:text="*{applyClass}"></th:block></span> <span>&nbsp;&nbsp;&nbsp;番号&nbsp;&nbsp;<th:block
+						th:text="*{applyNumber}"></span>
+				<th:block th:if="*{summaryFlag}">
+					<span>&nbsp;&nbsp;&nbsp;とりまとめ ✓ </span>
+				</th:block>
+			</div>
+			<br>
+			<table class="table bg-white table-bordered" id="sample1_table">
+				<tbody>
+					<tr>
+						<th rowspan="2">日時</th>
+						<td>自</td>
+						<td><th:block th:text="*{appStartDate}"></th:block></td>
+						<td><th:block th:text="*{appStartTime}"></th:block></td>
+					</tr>
+					<tr>
+						<td>至</td>
+						<td><th:block th:text="*{appFinishDate}"></th:block></td>
+						<td><th:block th:text="*{appFinishTime}"></th:block></td>
+					</tr>
+					<tr>
+						<th>場所</th>
+						<td colspan="3"><th:block th:text="*{appAddress}"></th:block></td>
+					</tr>
+
+					<tr>
+						<th>内容</th>
+						<th:block th:if="*{appContents} == 1">
+							<td colspan="3">合同企業説明会</td>
+						</th:block>
+						<th:block th:if="*{appContents} == 2">
+							<td colspan="3">単独説明会</td>
+						</th:block>
+						<th:block th:if="*{appContents} == 3">
+							<td colspan="3">試験</td>
+						</th:block>
+					</tr>
+
+
+					<th:block th:each="companys ,i : ${jobAppEntity.jobAppCompanys}">
+						<tr>
+							<th:block th:if="${i.index} == 0">
+								<th th:attr="rowspan=${i.size}">会社</th>
+							</th:block>
+							<td colspan="3"><th:block th:text="${companys}"></th:block></td>
+						</tr>
+					</th:block>
+
+
+					<th:block th:if="*{absenceFlag}">
+						<tr>
+							<th>欠席</th>
+							<td colspan="3"><th:block th:text="*{appStartAbsence}"></th:block>
+								～ <th:block th:text="*{appFinishAbsence}"></th:block></td>
+						</tr>
+					</th:block>
+
+					<th:block th:if="*{leaveFlag}">
+						<tr>
+							<th>早退</th>
+							<td colspan="3"><th:block th:text="*{appLeaveDate}"></th:block>
+								<th:block th:text="*{appLeaveTime}"></th:block>～</td>
+						</tr>
+					</th:block>
+
+					<th:block th:if="*{lateFlag}">
+						<tr>
+							<th>遅刻</th>
+							<td colspan="3"><th:block th:text="*{appLateDate}"></th:block>
+								<th:block th:text="*{appLateTime}">
+								</th:block>～</td>
+						</tr>
+					</th:block>
+					<tr>
+						<th colspan="4" class="text-left">メモ（連絡事項・スケジュール等（飛行機・宿泊先）</th>
+					</tr>
+					<tr>
+						<td colspan="4" class="text-left" height="250"><th:block
+								th:text="*{appMemo}"></th:block></td>
+					</tr>
+				</tbody>
+			</table>
+
+		</div>
+
+	</div>
+
+	<th:block th:object="${resEntity}">
+		<th:block th:if="*{status == 1}">
+			<h2>誤字チェックAI（メモ）</h2>
+			<div class="p-3 mb-2 text-dark">
+				<div class="container toggle-ai-open container-ai">
+					<table class="table bg-white table-bordered" id="sample1_table">
+						<tbody>
+							<tr>
+								<th>文字位置</th>
+								<th>誤字</th>
+								<th>誤字可能性</th>
+								<th colspan="3">訂正候補</th>
+							</tr>
+							<th:block th:each="alert : *{alerts}">
+								<tr>
+									<td><th:block th:text="${alert.pos}"></th:block></td>
+									<td><th:block th:text="${alert.word}"></th:block></td>
+									<td><th:block th:text="${alert.score}"></th:block>％</td>
+									<td><th:block th:text="${alert.suggestions[0]}"></th:block></td>
+									<td><th:block th:text="${alert.suggestions[1]}"></th:block></td>
+									<td><th:block th:text="${alert.suggestions[2]}"></th:block></td>
+								</tr>
+							</th:block>
+						</tbody>
+					</table>
+				</div>
+				<span id="advice">表示するには赤いバーをクリック</span>
+			</div>
+		</th:block>
+	</th:block>
+
+
+	<div class="text-right" th:object="${jobAppData}">
+		<th:block th:if="*{documentFlag}">
+			<a class="btn gray"
+				th:href="@{'/jobapp/jobappdocument/' + ${jobAppData.appId}}">書類確認</a>&nbsp;&nbsp;
+		</th:block>
+		<th:block
+			th:if="*{appStatus == 1 || appStatus == 3 || appStatus == 4}">
+			<button type="submit" form="remand" class="btn orange">差戻</button>&nbsp;&nbsp;
+		</th:block>
+		<th:block th:if="*{appStatus == 1}">
+			<a class="btn btn-success"
+				th:href="@{'/jobapp/jopappapproval/' + ${jobAppData.appId}}">承認</a>&nbsp;&nbsp;
+		</th:block>
+	</div>
+
+
+
+	<th:block th:object="${jobAppData}">
+		<th:block
+			th:if="*{appStatus == 1 || appStatus == 2|| appStatus == 3 || appStatus == 4}">
+			<h2>担任コメント</h2>
+			<div class="p-3 mb-2 text-dark">
+				<p class="text-danger">
+					<th:block th:text=${checkMessage}></th:block>
+				</p>
+				<div class="container">
+					<th:block
+						th:if="*{appStatus == 1 || appStatus == 3 || appStatus == 4 }">
+						<form id="remand" name="remand" method="post"
+							th:action="@{/jobapp/jobappremand/}">
+							<textarea placeholder="コメントを入力してください" class="tcome bg-white"
+								th:field="*{indicate}" name="indicate"></textarea>
+							<input type="hidden" name="appId" th:value="*{appId}">
+						</form>
+					</th:block>
+					<th:block th:if="*{appStatus == 2 && indicate != null}">
+						<p class="text-left p-reqComment">
+							<span th:text="*{indicate}"></span>
+						</p>
+					</th:block>
+				</div>
+			</div>
+		</th:block>
+	</th:block>
+	</div>
+	</div>
+
+
+	<!-- 共通スクリプト -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+.gray {
+	background-color: #9393aa;
+	color: white;
+}
+
+.gray:hover {
+	background-color: #64647d;
+	color: white;
+}
+
+.aqua {
+	background-color: #0080ff;
+	color: white;
+}
+
+.aqua:hover {
+	background-color: #0062c4;
+	color: white;
+}
+
+.orange {
+	background-color: #fa7405;
+	color: white;
+}
+
+.orange:hover {
+	background-color: #d26104;
+	color: white;
+}
+
+.green {
+	background-color: #008000;
+	color: white;
+}
+
+.green:hover {
+	background-color: #006400;
+	color: white;
+}

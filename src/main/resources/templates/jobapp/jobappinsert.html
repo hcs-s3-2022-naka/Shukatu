@@ -1,0 +1,353 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+
+<meta charset="UTF-8">
+<title>就職活動申請 -新規作成</title>
+
+<!-- モバイル設定 -->
+<meta id="viewport" name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="manifest" th:href="@{/css/manifest.json}"
+	crossorigin="use-credentials">
+<meta name="application-name" content="WebPortal">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="WebPortal">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<!-- アイコン設定 -->
+<link rel="icon" th:href="@{/img/favicon.ico}" sizes="192x192"
+	href="../static/img/favicon.ico">
+<link rel="shortcut icon" th:href="@{/img/favicon.ico}">
+<link rel="apple-touch-icon" th:href="@{/img/favicon.ico}">
+<link rel="apple-touch-icon" th:href="@{/img/favicon.ico}"
+	sizes="192x192">
+<link rel="apple-touch-icon" th:href="@{/img/favicon.ico}" sizes="58x58">
+
+<!-- スタイル設定 -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<link rel="stylesheet" th:href="@{/css/ress.css}"
+	href="../static/css/ress.css">
+<link rel="stylesheet" th:href="@{/css/home.css}"
+	href="../static/css/home.css">
+<link rel="stylesheet" th:href="@{/css/jobappinsert.css}"
+	href="../static/css/jobappinsert.css">
+<link rel="stylesheet" th:href="@{/css/jobapplist.css}"
+	href="../static/css/jobapplist.css">
+<link rel="stylesheet" th:href="@{/css/color.css}"
+	href="../static/css/color.css">
+<script th:src="@{/js/jobappinsert.js}"></script>
+<script>
+
+</script>
+</head>
+<body onload="document.hogehoge.delrow.disabled=true;">
+
+	<!-- 共通ヘッダ -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+		<h1>
+			<a class="navbar-brand title-font" th:href="@{/}">就活Portal.com</a>
+		</h1>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarToggler" aria-controls="navbarToggler"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarToggler">
+			<ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+				<li class="nav-item active"><a class="nav-link"
+					th:href="@{/change}"> <img class="config-img"
+						th:src="@{/img/config.png}" src="../static/img/config.png">
+				</a></li>
+				<li>
+					<form class="my-2 my-lg-0" method="post" th:action="@{/logout}">
+						<button class="btn btn-outline-light my-2 my-sm-0" type="submit">Logout</button>
+					</form>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<br>
+
+	<!-- コンテンツ -->
+	<div class="container">
+		<div class="content-box text-left">
+	<form method="post" th:action="@{/jobapp/jobappinsert/}"
+		th:object="${jobAppForm}" name="Form1">
+		<div class="text-right">
+			<a class="btn gray" th:href="@{/jobapp/jobapplist}">戻る</a>&nbsp;
+			<button type="submit" class="btn aqua">提出する</button>
+			&nbsp;&nbsp;
+		</div>
+		<h2>新規作成</h2>
+		<div class="p-3 mb-2 text-dark">
+			<div class="container">
+				<p class="text-danger">
+					<th:block th:text=${message}></th:block>
+				</p>
+				<p class="text-danger">
+					<th:block th:text=${errorMessage}></th:block>
+				</p>
+				<table class="table bg-white table-bordered" id="sample1_table">
+					<tbody>
+
+						<tr>
+							<th><span class="mandatory">*</span>クラス</th>
+							<td><select required name="applyClass" class="form-control"
+								th:field="*{applyClass}">
+									<th:block th:if="${userData.userAuthority.equals('STUDENT')}">
+										<option th:attr="value=${userData.belongClass}"><th:block
+												th:text="${userData.belongClass}"></th:block></option>
+									</th:block>
+									<th:block th:if="${userData.userAuthority.equals('TEACHER')}">
+										<option value=""></option>
+										<option value="S2A1">S2A1</option>
+										<option value="S2A2">S2A2</option>
+										<option value="S2A3">S2A3</option>
+										<option value="S3A1">S3A1</option>
+										<option value="S3A2">S3A2</option>
+										<option value="S3A3">S3A3</option>
+									</th:block>
+							</select></td>
+
+
+
+							<th><span class="mandatory">*</span>番号</th>
+							<td><select required name="applyNumber" class="form-control"
+								th:field="*{applyNumber}">
+									<th:block th:if="${userData.userAuthority.equals('STUDENT')}">
+										<option th:attr="value=${userData.studentNumber}"><th:block
+												th:text="${userData.studentNumber}"></th:block></option>
+									</th:block>
+									<th:block th:if="${userData.userAuthority.equals('TEACHER')}">
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+										<option value="8">8</option>
+										<option value="9">9</option>
+										<option value="10">10</option>
+										<option value="11">11</option>
+										<option value="12">12</option>
+										<option value="13">13</option>
+										<option value="14">14</option>
+										<option value="15">15</option>
+										<option value="16">16</option>
+										<option value="17">17</option>
+										<option value="18">18</option>
+										<option value="19">19</option>
+										<option value="20">20</option>
+										<option value="21">21</option>
+										<option value="22">22</option>
+										<option value="23">23</option>
+										<option value="24">24</option>
+										<option value="25">25</option>
+										<option value="26">26</option>
+										<option value="27">27</option>
+										<option value="28">28</option>
+										<option value="29">29</option>
+										<option value="30">30</option>
+										<option value="31">31</option>
+										<option value="32">32</option>
+										<option value="33">33</option>
+										<option value="34">34</option>
+										<option value="35">35</option>
+										<option value="36">36</option>
+										<option value="37">37</option>
+										<option value="38">38</option>
+										<option value="39">39</option>
+										<option value="40">40</option>
+										<option value="41">41</option>
+										<option value="42">42</option>
+										<option value="43">43</option>
+										<option value="44">44</option>
+										<option value="45">45</option>
+										<option value="46">46</option>
+										<option value="47">47</option>
+										<option value="48">48</option>
+										<option value="49">49</option>
+										<option value="50">50</option>
+									</th:block>
+							</select></td>
+							<th>とりまとめ</th>
+							<td><input type="checkbox" name="summaryFlag"
+								th:field="*{summaryFlag}"></td>
+						</tr>
+					</tbody>
+				</table>
+				<div>
+					<table class="table bg-white table-bordered" id="sample1_table">
+						<tbody>
+							<tr>
+								<th rowspan="2">日時</th>
+								<td><span class="mandatory">*</span>自</td>
+								<td class="form-group"><input type="date"
+									name="appStartDate" class="form-control"
+									th:field="*{appStartDate}"></td>
+								<td class="form-group"><input type="time"
+									name="appStartTime" class="form-control"
+									th:field="*{appStartTime}"></td>
+							</tr>
+							<tr>
+								<td>至</td>
+								<td class="form-group"><input type="date"
+									name="appFinishDate" class="form-control"></td>
+								<td class="form-group"><input type="time"
+									name="appFinishTime" class="form-control"></td>
+							</tr>
+							<tr>
+								<th><span class="mandatory">*</span>場所</th>
+								<td colspan="3"><input type="text" name="appAddress"
+									class="form-control mb-2" id="inlineFormInput"
+									placeholder="受験場所を入力してください。" th:field="*{appAddress}"></td>
+							</tr>
+
+							<tr>
+								<th><span class="mandatory">*</span>内容</th>
+								<td colspan="3"><input type="radio" name="appContents"
+									value="1" th:field="*{appContents}" onClick="changeDisabled()"><span>合企</span>&nbsp;
+									&nbsp; <input type="radio" name="appContents" value="2"
+									th:field="*{appContents}" onClick="changeDisabled()"><span>単独</span>&nbsp;
+									&nbsp;<input type="radio" name="appContents" value="3"
+									th:field="*{appContents}" onClick="changeDisabled()"><span>試験</span>&nbsp;
+									&nbsp;<input type="radio" name="appContents" value="99"
+									th:field="*{appContents}" onClick="changeDisabled()"><span>その他</span>
+									<p style="display: inline;">
+										<input type="text" name="appContentOther" size="30"
+											placeholder="その他の内容を入力してください。">
+									</p></td>
+							</tr>
+
+							<tr>
+								<th>欠席&nbsp;<input type="checkbox" name="absenceFlag"
+									th:field="*{absenceFlag}"></th>
+								<td class="form-group" colspan="2"><input type="date"
+									name="appStartAbsence" class="form-control"
+									th:field="*{appStartAbsence}"></td>
+								<td class="form-group" colspan="2"><input type="date"
+									name="appFinishAbsence" class="form-control"
+									th:field="*{appFinishAbsence}"></td>
+							</tr>
+
+							<tr>
+								<th>早退&nbsp;<input type="checkbox" name="leaveFlag"
+									th:field="*{leaveFlag}"></th>
+								<td class="form-group" colspan="2"><input type="date"
+									name="appLeaveDate" class="form-control"
+									th:field="*{appLeaveDate}"></td>
+								<td class="form-group" colspan="2"><input type="time"
+									name="appLeaveTime" class="form-control"
+									th:field="*{appLeaveTime}"></td>
+							</tr>
+
+							<tr>
+								<th>遅刻&nbsp;<input type="checkbox" name="lateFlag"
+									th:field="*{lateFlag}">
+								</th>
+								<td class="form-group" colspan="2"><input type="date"
+									name="appLateDate" class="form-control"
+									th:field="*{appLateDate}"></td>
+								<td class="form-group" colspan="2"><input type="time"
+									name="appLateTime" class="form-control"
+									th:field="*{appLateTime}"></td>
+							</tr>
+						</tbody>
+					</table>
+
+					<div id="hist">
+						<table class="table bg-white table-bordered" id="sample1_table">
+							<tbody id="histTablebody">
+								<tr id="histrow0">
+									<th id="num0"><span class="mandatory">*</span>会社名</th>
+									<td><input type="text" name="appCompany[0]"
+										class="form-control mb-2" id="ymd"
+										placeholder="受験企業を入力してください。"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<input type="button" id=addrow value="会社名の追加"
+						class="btn btn-outline-danger btn-block" onClick="hage();">
+					<br>
+					<textarea class="form-control" id="exampleFormControlTextarea1"
+						rows="3" placeholder="メモ（連絡事項・スケジュール等（飛行機・宿泊先））" name="appMemo"
+						th:field="*{appMemo}"></textarea>
+				</div>
+			</div>
+		</div>
+
+		<br> <br> <h2>受験申込</h2>
+		<br>
+		<div class="p-3 mb-2 text-dark">
+			<div class="container">
+				<table class="table bg-white table-bordered" id="sample1_table">
+					<tbody>
+						<tr>
+							<th>提出書類</th>
+							<td><input type="checkbox" name="documentFlag"
+								th:field="*{documentFlag}"></td>
+							<th class="form-group">提出期限</th>
+							<td><input type="date" name="deadline" class="form-control"
+								th:field="*{deadline}"></td>
+						</tr>
+					</tbody>
+				</table>
+				<table class="table bg-white table-bordered" id="sample1_table">
+					<tbody>
+						<tr class="table-light">
+							<th align="right">履歴書</th>
+							<td><input type="checkbox" name="resume"></td>
+							<th align="right">推薦書</th>
+							<td><input type="checkbox" name="recommendation"></td>
+							<th align="right">大学（卒業・卒業見込）証明書</th>
+							<td><input type="checkbox" name="universityCrtificate"></td>
+						</tr>
+
+						<tr class="table-light">
+							<th align="right">HCS成績証明書</th>
+							<td><input type="checkbox" name="hcsTranscript"></td>
+							<th align="right">HCS卒業見込証明書</th>
+							<td><input type="checkbox" name="hcsCrtificate"></td>
+							<th align="right">健康診断証明書</th>
+							<td><input type="checkbox" name="healthCheckCertificate"></td>
+						</tr>
+
+						<tr class="table-light">
+							<th align="right">出身高校成績証明書</th>
+							<td><input type="checkbox" name="highscoolTranscript"></td>
+							<th align="right">大学成績証明書</th>
+							<td><input type="checkbox" name="universityTranscript"></td>
+							<th align="right">個人情報等同意書</th>
+							<td><input type="checkbox" name="personalInfo"></td>
+						</tr>
+					</tbody>
+				</table>
+				<br> <br> <br>
+			</div>
+		</div>
+	</form>
+	</div>
+	</div>
+	<!-- 共通スクリプト -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+</body>
+</html>
